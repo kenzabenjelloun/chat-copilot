@@ -118,11 +118,12 @@ export const DocumentsTab: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [importingDocuments, selectedId]);
 
-    const handleDelete = async (chatId: string, fileId: string) => {
+    const handleDelete = async (chatId: string, fileId: string): Promise<void> => {
         try {
             await fileHandler.deleteFile(chatId, fileId);
-            // Update the state immediately after deleting the file
-            setResources((prevResources) => prevResources.filter((resource) => resource.id !== fileId));
+            setResources((prevResources) => {
+            return prevResources.filter((resource) => resource.id !== fileId);
+            });
         } catch (error) {
             console.error('Failed to delete the file:', error);
         }
@@ -314,7 +315,13 @@ function useTable(resources: ChatMemorySource[], handleDelete: (chatId: string, 
             ),
             renderCell: (item) => (
                 <TableCell key={`${item.id}-delete`}>
-                    <button onClick={() => handleDelete(item.chatId, item.id)}>Delete</button>
+                    <button onClick={async () => {
+                    try {
+                        await handleDelete(item.chatId, item.id);
+                    } catch (error) {
+                        console.error('Failed to delete the file:', error);
+                    }
+                    }}>Delete</button>
                 </TableCell>
             ),
         }),

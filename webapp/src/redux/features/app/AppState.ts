@@ -82,7 +82,7 @@ export const Features = {
         label: 'Save/Load Chat Sessions',
     },
     [FeatureKeys.MultiUserChat]: {
-        enabled: false,
+        enabled: true,
         label: 'Live Chat Session Sharing',
         description: 'Enable multi-user chat sessions. Not available when authorization is disabled.',
         inactive: !AuthHelper.IsAuthAAD,
